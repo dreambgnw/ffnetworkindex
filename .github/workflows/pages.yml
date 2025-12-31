@@ -1,0 +1,45 @@
+# GitHub Pages へのデプロイ用ワークフロー
+name: Deploy to Pages
+
+on:
+  # メインブランチへのプッシュ時に実行
+  push:
+    branches: ["main"]
+
+  # 手動実行を許可
+  workflow_dispatch:
+
+# 権限の設定 (重要: これがないとデプロイエラーになります)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時実行の制御 (古いデプロイをキャンセルして最新のみ実行)
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # デプロイジョブ
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps:deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # リポジトリのルートにあるファイルをアップロード
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -20,7 +20,7 @@
     <!-- Tailwind Config -->
     <script>
         tailwind.config = {
-            darkMode: 'class',
+            // darkMode: 'class' を削除し、OS設定(media)に追従させます
             theme: {
                 extend: {
                     fontFamily: {
@@ -32,7 +32,6 @@
                             orange: '#f97316',
                             amber: '#fbbf24',
                             dark: '#0c0a09', // stone-950
-                            panel: 'rgba(28, 25, 23, 0.6)', // stone-900 with opacity
                         }
                     },
                     animation: {
@@ -56,48 +55,80 @@
     <style>
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0c0a09; }
-        ::-webkit-scrollbar-thumb { background: #44403c; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ea580c; }
         
+        /* Light Mode Scrollbar */
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+        /* Dark Mode Scrollbar */
+        @media (prefers-color-scheme: dark) {
+            ::-webkit-scrollbar-track { background: #0c0a09; }
+            ::-webkit-scrollbar-thumb { background: #44403c; }
+        }
+        
+        /* Glass Panel (Light/Dark Aware) */
         .glass-panel {
-            background: rgba(28, 25, 23, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        /* Light Mode Glass */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Dark Mode Glass */
+        @media (prefers-color-scheme: dark) {
+            .glass-panel {
+                background: rgba(28, 25, 23, 0.6);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
         }
         
         .text-glow {
-            text-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
         }
         
+        /* Background Grid */
         .bg-grid {
             background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            /* Light Mode Grid */
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+        @media (prefers-color-scheme: dark) {
+            .bg-grid {
+                /* Dark Mode Grid */
+                background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                                  linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            }
         }
     </style>
 </head>
-<body class="bg-brand-dark text-stone-200 antialiased min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden">
+<body class="bg-stone-50 dark:bg-brand-dark text-stone-800 dark:text-stone-200 antialiased min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden transition-colors duration-300">
 
     <!-- Background Effects -->
     <div class="fixed inset-0 z-[-1] bg-grid pointer-events-none"></div>
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
-        <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-amber-600/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <!-- Light Mode: Slightly warmer/lighter blobs -->
+        <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-orange-200/40 dark:bg-orange-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-amber-200/40 dark:bg-amber-600/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 bg-brand-dark/80 backdrop-blur-md">
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-stone-200 dark:border-white/5 bg-white/80 dark:bg-brand-dark/80 backdrop-blur-md transition-colors duration-300">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse group">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-black font-bold font-mono group-hover:rotate-12 transition-transform">
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold font-mono group-hover:rotate-12 transition-transform shadow-md">
                     Q
                 </div>
-                <span class="self-center text-xl font-bold whitespace-nowrap text-white tracking-tight">QUICK INSTANT</span>
+                <span class="self-center text-xl font-bold whitespace-nowrap text-stone-900 dark:text-white tracking-tight">QUICK INSTANT</span>
             </a>
             <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                <a href="https://blog.ffnet.work" class="text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors">
+                <a href="https://blog.ffnet.work" class="text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:focus:ring-orange-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors shadow-lg shadow-orange-500/20">
                     ブログを読む
                 </a>
             </div>
@@ -107,26 +138,26 @@
     <!-- Hero Section -->
     <header class="relative pt-40 pb-20 px-4 text-center">
         <div class="max-w-4xl mx-auto relative z-10 animate-float">
-            <div class="inline-block mb-4 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-400 text-xs font-bold tracking-widest uppercase">
+            <div class="inline-block mb-4 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold tracking-widest uppercase">
                 Full Stack & Infrastructure
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight text-glow font-sans">
+            <h1 class="text-5xl md:text-7xl font-bold text-stone-900 dark:text-white mb-6 tracking-tight text-glow font-sans">
                 Shun Tonegawa
             </h1>
-            <p class="text-lg md:text-xl text-stone-400 font-light max-w-2xl mx-auto leading-relaxed">
+            <p class="text-lg md:text-xl text-stone-600 dark:text-stone-400 font-light max-w-2xl mx-auto leading-relaxed">
                 ヘッドレス、サーバーサイド、そして高音質。<br class="hidden md:block" />
                 自作インフラの上で、モダンなWeb体験を構築しています。
             </p>
             
             <!-- Social Links -->
             <div class="flex justify-center gap-6 mt-10">
-                <a href="https://github.com/dreambgnw" target="_blank" class="text-stone-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full" aria-label="GitHub">
+                <a href="https://github.com/dreambgnw" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="GitHub">
                     <i data-lucide="github" class="w-6 h-6"></i>
                 </a>
-                <a href="https://hnr.f5.si" target="_blank" class="text-stone-400 hover:text-concrnt transition-colors p-2 hover:bg-white/5 rounded-full" aria-label="Concrnt">
+                <a href="https://hnr.f5.si" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-concrnt transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="Concrnt">
                     <i data-lucide="message-square" class="w-6 h-6"></i>
                 </a>
-                <a href="https://signal.me/#username" target="_blank" class="text-stone-400 hover:text-blue-400 transition-colors p-2 hover:bg-white/5 rounded-full" aria-label="Signal">
+                <a href="https://signal.me/#username" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-blue-400 transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="Signal">
                     <i data-lucide="message-circle" class="w-6 h-6"></i>
                 </a>
             </div>
@@ -137,17 +168,17 @@
 
         <!-- About & Tech Stack -->
         <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <!-- Terminal -->
-            <div class="glass-panel rounded-xl overflow-hidden shadow-2xl border-orange-500/20 transform hover:scale-[1.01] transition-transform duration-500">
-                <div class="bg-[#1a1512] px-4 py-3 flex items-center gap-2 border-b border-white/10">
+            <!-- Terminal (Always Dark Style for Authenticity) -->
+            <div class="rounded-xl overflow-hidden shadow-2xl border border-stone-200 dark:border-orange-500/20 transform hover:scale-[1.01] transition-transform duration-500 bg-[#1a1512]">
+                <div class="bg-[#292524] px-4 py-3 flex items-center gap-2 border-b border-white/10">
                     <div class="flex gap-2">
                         <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
                         <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                         <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
                     </div>
-                    <span class="ml-4 text-xs text-stone-500 font-mono">shun@nixos:~</span>
+                    <span class="ml-4 text-xs text-stone-400 font-mono">shun@nixos:~</span>
                 </div>
-                <div class="p-6 font-mono text-sm space-y-4 bg-[#0c0a09]/90">
+                <div class="p-6 font-mono text-sm space-y-4 bg-[#0c0a09]">
                     <div>
                         <span class="text-green-500">➜</span> <span class="text-blue-400">~</span> neofetch
                     </div>
@@ -163,41 +194,41 @@
 
             <!-- Tech Stack Icons -->
             <div class="space-y-6">
-                <h2 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                <h2 class="text-3xl font-bold text-stone-900 dark:text-white mb-6 flex items-center gap-3">
                     <i data-lucide="cpu" class="text-orange-500"></i>
                     技術スタック
                 </h2>
-                <p class="text-stone-400 leading-relaxed mb-8">
+                <p class="text-stone-600 dark:text-stone-400 leading-relaxed mb-8">
                     モダンなWeb技術の探求と、自宅サーバー環境の構築が趣味です。
                     パフォーマンスと開発体験の最適化に情熱を注いでいます。
                 </p>
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 rounded-lg bg-white/5 border border-white/5 flex items-center gap-3">
-                        <i data-lucide="server" class="text-blue-400 shrink-0"></i>
+                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
+                        <i data-lucide="server" class="text-blue-500 dark:text-blue-400 shrink-0"></i>
                         <div>
-                            <div class="font-bold text-stone-200">インフラ</div>
+                            <div class="font-bold text-stone-800 dark:text-stone-200">インフラ</div>
                             <div class="text-xs text-stone-500">NixOS, Docker, Incus</div>
                         </div>
                     </div>
-                    <div class="p-4 rounded-lg bg-white/5 border border-white/5 flex items-center gap-3">
-                        <i data-lucide="code-2" class="text-yellow-400 shrink-0"></i>
+                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
+                        <i data-lucide="code-2" class="text-yellow-500 dark:text-yellow-400 shrink-0"></i>
                         <div>
-                            <div class="font-bold text-stone-200">フロントエンド</div>
+                            <div class="font-bold text-stone-800 dark:text-stone-200">フロントエンド</div>
                             <div class="text-xs text-stone-500">SolidJS, Astro, Tailwind</div>
                         </div>
                     </div>
-                    <div class="p-4 rounded-lg bg-white/5 border border-white/5 flex items-center gap-3">
-                        <i data-lucide="database" class="text-green-400 shrink-0"></i>
+                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
+                        <i data-lucide="database" class="text-green-500 dark:text-green-400 shrink-0"></i>
                         <div>
-                            <div class="font-bold text-stone-200">バックエンド</div>
-                            <div class="text-xs text-stone-500">Strapi, MicroCMS, Hono</div>
+                            <div class="font-bold text-stone-800 dark:text-stone-200">バックエンド</div>
+                            <div class="text-xs text-stone-500">MicroCMS</div>
                         </div>
                     </div>
-                    <div class="p-4 rounded-lg bg-white/5 border border-white/5 flex items-center gap-3">
-                        <i data-lucide="music" class="text-pink-400 shrink-0"></i>
+                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
+                        <i data-lucide="music" class="text-pink-500 dark:text-pink-400 shrink-0"></i>
                         <div>
-                            <div class="font-bold text-stone-200">趣味</div>
+                            <div class="font-bold text-stone-800 dark:text-stone-200">趣味</div>
                             <div class="text-xs text-stone-500">Audio, DTM</div>
                         </div>
                     </div>
@@ -208,7 +239,7 @@
         <!-- Projects / Portfolio -->
         <section>
             <div class="flex items-center justify-between mb-10">
-                <h2 class="text-3xl font-bold text-white flex items-center gap-3">
+                <h2 class="text-3xl font-bold text-stone-900 dark:text-white flex items-center gap-3">
                     <i data-lucide="folder-open" class="text-orange-500"></i>
                     プロジェクト
                 </h2>
@@ -216,47 +247,47 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Project 1 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center mb-4 text-blue-400 group-hover:text-blue-300 group-hover:bg-blue-500/20 transition-colors">
+                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center mb-4 text-blue-500 dark:text-blue-400 group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors">
                         <i data-lucide="server" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2">自宅サーバー</h3>
-                    <p class="text-stone-400 text-sm mb-4 leading-relaxed">
+                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">自宅サーバー</h3>
+                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
                         NixOSとIncusコンテナで管理されたフルスタック・インフラストラクチャ。ブログやSNSノード、Botをホストしています。
                     </p>
                     <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">NixOS</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">Cloudflare</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">NixOS</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Cloudflare</span>
                     </div>
                 </div>
 
                 <!-- Project 2 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-lg bg-pink-500/10 flex items-center justify-center mb-4 text-pink-400 group-hover:text-pink-300 group-hover:bg-pink-500/20 transition-colors">
+                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
+                    <div class="w-12 h-12 rounded-lg bg-pink-100 dark:bg-pink-500/10 flex items-center justify-center mb-4 text-pink-500 dark:text-pink-400 group-hover:bg-pink-200 dark:group-hover:bg-pink-500/20 transition-colors">
                         <i data-lucide="share-2" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Concrntノード</h3>
-                    <p class="text-stone-400 text-sm mb-4 leading-relaxed">
+                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">Concrntノード</h3>
+                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
                         自鯖で運用する分散型SNSノード。ActivityPubの連合やカスタムリレーの実験を行っています。
                     </p>
                     <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">ActivityPub</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">Docker</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">ActivityPub</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Docker</span>
                     </div>
                 </div>
 
                 <!-- Project 3 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1">
-                    <div class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4 text-orange-400 group-hover:text-orange-300 group-hover:bg-orange-500/20 transition-colors">
+                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
+                    <div class="w-12 h-12 rounded-lg bg-orange-100 dark:bg-orange-500/10 flex items-center justify-center mb-4 text-orange-500 dark:text-orange-400 group-hover:bg-orange-200 dark:group-hover:bg-orange-500/20 transition-colors">
                         <i data-lucide="layout" class="w-6 h-6"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2">ヘッドレスブログ</h3>
-                    <p class="text-stone-400 text-sm mb-4 leading-relaxed">
+                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">ヘッドレスブログ</h3>
+                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
                         コンテンツ管理(MicroCMS)と表示(SolidStart)を分離した、モダンな静的ブログアーキテクチャ。
                     </p>
                     <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">SolidJS</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-stone-400">MicroCMS</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">SolidJS</span>
+                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">MicroCMS</span>
                     </div>
                 </div>
             </div>
@@ -268,11 +299,11 @@
             <!-- Latest Blog -->
             <div class="lg:col-span-2 glass-panel p-6 rounded-xl">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
                         <i data-lucide="pen-tool" class="text-orange-500 w-5 h-5"></i>
                         最新の記事
                     </h2>
-                    <a href="https://blog.ffnet.work" class="text-xs text-orange-500 hover:text-white transition-colors flex items-center gap-1">
+                    <a href="https://blog.ffnet.work" class="text-xs text-orange-600 dark:text-orange-500 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1">
                         すべて見る <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </a>
                 </div>
@@ -280,8 +311,8 @@
                     <!-- JS Injected -->
                     <li class="animate-pulse flex space-x-4">
                         <div class="flex-1 space-y-2 py-1">
-                            <div class="h-4 bg-stone-800 rounded w-3/4"></div>
-                            <div class="h-4 bg-stone-800 rounded w-1/2"></div>
+                            <div class="h-4 bg-stone-200 dark:bg-stone-800 rounded w-3/4"></div>
+                            <div class="h-4 bg-stone-200 dark:bg-stone-800 rounded w-1/2"></div>
                         </div>
                     </li>
                 </ul>
@@ -290,7 +321,7 @@
             <!-- Now Playing -->
             <div class="lg:col-span-1 glass-panel p-6 rounded-xl border-l-4 border-l-transparent transition-colors" id="music-panel">
                 <div class="flex items-center gap-2 mb-6">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <h2 class="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
                         <i data-lucide="headphones" class="text-amber-500 w-5 h-5"></i>
                         再生中
                     </h2>
@@ -298,8 +329,8 @@
                 </div>
                 
                 <div id="lastfm-widget" class="flex flex-col items-center text-center gap-4 py-4">
-                    <div class="bg-stone-800 p-4 rounded-full">
-                        <i data-lucide="music" class="w-8 h-8 text-stone-600"></i>
+                    <div class="bg-stone-100 dark:bg-stone-800 p-4 rounded-full">
+                        <i data-lucide="music" class="w-8 h-8 text-stone-400 dark:text-stone-600"></i>
                     </div>
                     <p class="text-stone-500 text-sm">再生停止中...</p>
                 </div>
@@ -309,7 +340,7 @@
 
     </main>
 
-    <footer class="py-8 text-center text-stone-600 text-sm font-mono border-t border-white/5 bg-[#0c0a09]">
+    <footer class="py-8 text-center text-stone-500 dark:text-stone-600 text-sm font-mono border-t border-stone-200 dark:border-white/5 bg-stone-50 dark:bg-[#0c0a09] transition-colors duration-300">
         <p>&copy; 2025 Shun Tonegawa. Powered by NixOS & Cloudflare.</p>
     </footer>
 
@@ -340,12 +371,12 @@
                     data.items.slice(0, 3).forEach(item => {
                         const date = new Date(item.pubDate).toLocaleDateString('ja-JP');
                         const li = document.createElement('li');
-                        li.className = 'group border-b border-white/5 pb-3 last:border-0 last:pb-0';
+                        li.className = 'group border-b border-stone-100 dark:border-white/5 pb-3 last:border-0 last:pb-0';
                         li.innerHTML = `
                             <a href="${item.link}" target="_blank" class="block">
                                 <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                                    <h3 class="text-stone-300 font-medium group-hover:text-orange-400 transition-colors line-clamp-1">${item.title}</h3>
-                                    <span class="text-xs text-stone-500 font-mono whitespace-nowrap bg-white/5 px-2 py-0.5 rounded">${date}</span>
+                                    <h3 class="text-stone-700 dark:text-stone-300 font-medium group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-1">${item.title}</h3>
+                                    <span class="text-xs text-stone-500 font-mono whitespace-nowrap bg-stone-100 dark:bg-white/5 px-2 py-0.5 rounded">${date}</span>
                                 </div>
                             </a>
                         `;
@@ -356,7 +387,7 @@
                 }
             } catch (e) {
                 list.innerHTML = `
-                    <li class="text-stone-500 text-sm py-4 text-center border border-dashed border-stone-800 rounded-lg">
+                    <li class="text-stone-500 text-sm py-4 text-center border border-dashed border-stone-300 dark:border-stone-800 rounded-lg">
                         記事の読み込みに失敗しました<br>
                         <span class="text-xs opacity-50">ネットワーク設定を確認してください</span>
                     </li>
@@ -388,15 +419,15 @@
 
                     let html = '';
                     if(image) {
-                        html += `<img src="${image}" alt="Album Art" class="w-24 h-24 rounded-lg shadow-lg border border-stone-700 mb-2 object-cover">`;
+                        html += `<img src="${image}" alt="Album Art" class="w-24 h-24 rounded-lg shadow-lg border border-stone-200 dark:border-stone-700 mb-2 object-cover">`;
                     } else {
-                        html += `<div class="bg-stone-800 p-4 rounded-full mb-2"><i data-lucide="music" class="w-8 h-8 text-stone-500"></i></div>`;
+                        html += `<div class="bg-stone-100 dark:bg-stone-800 p-4 rounded-full mb-2"><i data-lucide="music" class="w-8 h-8 text-stone-400 dark:text-stone-500"></i></div>`;
                     }
 
                     html += `
                         <div class="text-center w-full">
-                            <p class="text-white font-bold truncate text-base mb-1">${track.name}</p>
-                            <p class="text-stone-400 text-sm truncate">${track.artist['#text']}</p>
+                            <p class="text-stone-900 dark:text-white font-bold truncate text-base mb-1">${track.name}</p>
+                            <p class="text-stone-500 dark:text-stone-400 text-sm truncate">${track.artist['#text']}</p>
                         </div>
                     `;
 
@@ -409,7 +440,7 @@
                     } else {
                         indicator.classList.add('hidden');
                         panel.classList.remove('border-l-amber-500');
-                        panel.classList.add('border-l-stone-800');
+                        panel.classList.add('border-l-stone-200', 'dark:border-l-stone-800');
                     }
                 }
             } catch (e) {

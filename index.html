@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shun Tonegawa | QUICK INSTANT</title>
-    <meta name="description" content="Shun Tonegawaのポートフォリオサイトです">
     
     <!-- Nostr NIP-05 Verification -->
     <meta property="nostr:nip05" content="shun@ffnet.work" />
 
-    <!-- Google Fonts (Noto Sans JPを追加) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -17,10 +16,8 @@
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
-            // darkMode: 'class' を削除し、OS設定(media)に追従させます
             theme: {
                 extend: {
                     fontFamily: {
@@ -31,430 +28,321 @@
                         brand: {
                             orange: '#f97316',
                             amber: '#fbbf24',
-                            dark: '#0c0a09', // stone-950
+                            dark: '#0c0a09',
                         }
                     },
                     animation: {
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
                     }
                 }
             }
         }
     </script>
 
-    <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        
-        /* Light Mode Scrollbar */
-        ::-webkit-scrollbar-track { background: #f5f5f4; }
-        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+    <style type="text/css">
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0c0a09; }
+        ::-webkit-scrollbar-thumb { background: #292524; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #f97316; }
-
-        /* Dark Mode Scrollbar */
-        @media (prefers-color-scheme: dark) {
-            ::-webkit-scrollbar-track { background: #0c0a09; }
-            ::-webkit-scrollbar-thumb { background: #44403c; }
-        }
         
-        /* Glass Panel (Light/Dark Aware) */
+        /* Glass Panel */
         .glass-panel {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: background-color 0.3s, border-color 0.3s;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(28, 25, 23, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Light Mode Glass */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        /* Dark Mode Glass */
-        @media (prefers-color-scheme: dark) {
-            .glass-panel {
-                background: rgba(28, 25, 23, 0.6);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-            }
-        }
-        
-        .text-glow {
-            text-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+        .glass-panel:hover {
+            border: 1px solid rgba(249, 115, 22, 0.3);
         }
         
         /* Background Grid */
         .bg-grid {
             background-size: 40px 40px;
-            /* Light Mode Grid */
-            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
-        @media (prefers-color-scheme: dark) {
-            .bg-grid {
-                /* Dark Mode Grid */
-                background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                                  linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            }
+
+        /* Glow Effect */
+        .text-glow-orange {
+            color: #f97316;
+            text-shadow: 0 0 25px rgba(249, 115, 22, 0.5);
+        }
+
+        /* Music Visualizer */
+        .visualizer span {
+            display: inline-block;
+            width: 3px;
+            background: #f97316;
+            margin-right: 1.5px;
+            animation: v-bounce 1s ease-in-out infinite;
+        }
+        @keyframes v-bounce {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
+        }
+
+        /* Background Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+            animation: pulse 8s infinite alternate;
         }
     </style>
 </head>
-<body class="bg-stone-50 dark:bg-brand-dark text-stone-800 dark:text-stone-200 antialiased min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden transition-colors duration-300">
+<body class="bg-brand-dark text-stone-200 antialiased min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden bg-grid">
 
-    <!-- Background Effects -->
-    <div class="fixed inset-0 z-[-1] bg-grid pointer-events-none"></div>
+    <!-- Background Elements -->
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <!-- Light Mode: Slightly warmer/lighter blobs -->
-        <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-orange-200/40 dark:bg-orange-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
-        <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-amber-200/40 dark:bg-amber-600/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="blob w-[500px] h-[500px] bg-orange-600 top-[-10%] right-[-5%]"></div>
+        <div class="blob w-[300px] h-[300px] bg-amber-600 bottom-[-5%] left-[-5%]" style="animation-delay: -4s;"></div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 top-0 start-0 border-b border-stone-200 dark:border-white/5 bg-white/80 dark:bg-brand-dark/80 backdrop-blur-md transition-colors duration-300">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse group">
-                <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold font-mono group-hover:rotate-12 transition-transform shadow-md">
-                    Q
-                </div>
-                <span class="self-center text-xl font-bold whitespace-nowrap text-stone-900 dark:text-white tracking-tight">QUICK INSTANT</span>
-            </a>
-            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                <a href="https://blog.ffnet.work" class="text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 dark:focus:ring-orange-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors shadow-lg shadow-orange-500/20">
-                    ブログを読む
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="relative pt-40 pb-20 px-4 text-center">
-        <div class="max-w-4xl mx-auto relative z-10 animate-float">
-            <div class="inline-block mb-4 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold tracking-widest uppercase">
-                Full Stack & Infrastructure
-            </div>
-            <h1 class="text-5xl md:text-7xl font-bold text-stone-900 dark:text-white mb-6 tracking-tight text-glow font-sans">
-                Shun Tonegawa
-            </h1>
-            <p class="text-lg md:text-xl text-stone-600 dark:text-stone-400 font-light max-w-2xl mx-auto leading-relaxed">
-                偶然から生まれるものもある<br class="hidden md:block" />
-                自作インフラの上で、モダンなWeb体験を構築しています。
-            </p>
+    <div class="container mx-auto px-4 py-8 lg:py-24 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
-            <!-- Social Links -->
-            <div class="flex justify-center gap-6 mt-10">
-                <a href="https://github.com/dreambgnw" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="GitHub">
-                    <i data-lucide="github" class="w-6 h-6"></i>
-                </a>
-                <a href="https://mi.ffnet.work" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-concrnt transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="Concrnt">
-                    <i data-lucide="message-square" class="w-6 h-6"></i>
-                </a>
-                <a href="https://signal.me/#eu/m81TbpYpae9qUsL3SK2HkY9NnEzHpuBODVw3PZwdg4uHN1hupMpB4biJUwcuAI-f" target="_blank" class="text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-blue-400 transition-colors p-2 hover:bg-stone-200 dark:hover:bg-white/5 rounded-full" aria-label="Signal">
-                    <i data-lucide="message-circle" class="w-6 h-6"></i>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 py-12 max-w-6xl space-y-24">
-
-        <!-- About & Tech Stack -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <!-- Terminal (Always Dark Style for Authenticity) -->
-            <div class="rounded-xl overflow-hidden shadow-2xl border border-stone-200 dark:border-orange-500/20 transform hover:scale-[1.01] transition-transform duration-500 bg-[#1a1512]">
-                <div class="bg-[#292524] px-4 py-3 flex items-center gap-2 border-b border-white/10">
-                    <div class="flex gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            <!-- Left Column: Profile -->
+            <div class="lg:col-span-4 space-y-10 lg:sticky lg:top-24">
+                <header class="space-y-6 text-center lg:text-left">
+                    <div class="relative inline-block group">
+                        <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-orange-500 to-amber-500 p-[2px] shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                            <img src="https://image.nostr.build/bfdd902d28111cd56afc671b50bc49ac6ebc02e09760e7d4b1f3a8bc32784937.png" alt="Shun" class="w-full h-full rounded-3xl object-cover bg-stone-900">
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 w-12 h-12 rounded-full bg-brand-dark border-2 border-orange-500 flex items-center justify-center shadow-lg text-2xl select-none">
+                            🌴
+                        </div>
                     </div>
-                    <span class="ml-4 text-xs text-stone-400 font-mono">shun@nixos:~</span>
-                </div>
-                <div class="p-6 font-mono text-sm space-y-4 bg-[#0c0a09]">
+                    
                     <div>
-                        <span class="text-green-500">➜</span> <span class="text-blue-400">~</span> neofetch
+                        <h1 class="text-4xl lg:text-5xl font-black text-white tracking-tighter text-glow-orange">Shun Tonegawa</h1>
+                        <p class="text-orange-500 font-mono text-sm mt-2 uppercase tracking-[0.3em] font-bold">Chillout, Quickly, Kindness</p>
                     </div>
-                    <div class="grid grid-cols-[100px_1fr] gap-x-4 gap-y-2 text-stone-300">
-                        <span class="font-bold text-blue-400">OS</span> <span>NixOS / Ubuntu</span>
-                        <span class="font-bold text-orange-400">Host</span> <span>Incus Container</span>
-                        <span class="font-bold text-purple-400">Shell</span> <span>zsh + tmux</span>
-                        <span class="font-bold text-yellow-400">Audio</span> <span>FiiO BTR13</span>
-                        <span class="font-bold text-green-400">Focus</span> <span>Misskey</span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Tech Stack Icons -->
-            <div class="space-y-6">
-                <h2 class="text-3xl font-bold text-stone-900 dark:text-white mb-6 flex items-center gap-3">
-                    <i data-lucide="cpu" class="text-orange-500"></i>
-                    技術スタック
-                </h2>
-                <p class="text-stone-600 dark:text-stone-400 leading-relaxed mb-8">
-                    モダンなWeb技術の探求と、自宅サーバー環境の構築が趣味です。
-                    パフォーマンスと開発体験の最適化に情熱を注いでいます。
-                </p>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
-                        <i data-lucide="server" class="text-blue-500 dark:text-blue-400 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-stone-800 dark:text-stone-200">インフラ</div>
-                            <div class="text-xs text-stone-500">NixOS, Docker, Incus</div>
-                        </div>
-                    </div>
-                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
-                        <i data-lucide="code-2" class="text-yellow-500 dark:text-yellow-400 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-stone-800 dark:text-stone-200">フロントエンド</div>
-                            <div class="text-xs text-stone-500">Hugo, Tailwind</div>
-                        </div>
-                    </div>
-                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
-                        <i data-lucide="database" class="text-green-500 dark:text-green-400 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-stone-800 dark:text-stone-200">SNS</div>
-                            <div class="text-xs text-stone-500">Misskey</div>
-                        </div>
-                    </div>
-                    <div class="p-4 rounded-lg bg-white/50 dark:bg-white/5 border border-stone-200 dark:border-white/5 flex items-center gap-3 shadow-sm dark:shadow-none">
-                        <i data-lucide="music" class="text-pink-500 dark:text-pink-400 shrink-0"></i>
-                        <div>
-                            <div class="font-bold text-stone-800 dark:text-stone-200">趣味</div>
-                            <div class="text-xs text-stone-500">Audio, DTM</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects / Portfolio -->
-        <section>
-            <div class="flex items-center justify-between mb-10">
-                <h2 class="text-3xl font-bold text-stone-900 dark:text-white flex items-center gap-3">
-                    <i data-lucide="folder-open" class="text-orange-500"></i>
-                    プロジェクト
-                </h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Project 1 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
-                    <div class="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center mb-4 text-blue-500 dark:text-blue-400 group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors">
-                        <i data-lucide="server" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">自宅サーバー</h3>
-                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
-                        NixOSとIncusコンテナで管理されたフルスタック・インフラストラクチャ。SNSをホストしています。
+                    <p class="text-stone-400 leading-relaxed text-base max-w-sm mx-auto lg:mx-0">
+                        よくモノを作っています<br>
+                        リンク集は<a href="https://blog.ffnet.work/post/links" class="text-orange-500 hover:text-orange-400">こちら</a>
                     </p>
-                    <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">NixOS</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Cloudflare</span>
-                    </div>
-                </div>
+                </header>
 
-                <!-- Project 2 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
-                    <div class="w-12 h-12 rounded-lg bg-pink-100 dark:bg-pink-500/10 flex items-center justify-center mb-4 text-pink-500 dark:text-pink-400 group-hover:bg-pink-200 dark:group-hover:bg-pink-500/20 transition-colors">
-                        <i data-lucide="share-2" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">Misskeyサーバー</h3>
-                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
-                        自鯖で運用する分散型SNS、ActivityPubの連合を行っています。
-                    </p>
-                    <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">ActivityPub</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Docker</span>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="glass-panel p-6 rounded-xl group hover:border-orange-500/50 transition-all hover:-translate-y-1 hover:shadow-lg dark:hover:shadow-none">
-                    <div class="w-12 h-12 rounded-lg bg-orange-100 dark:bg-orange-500/10 flex items-center justify-center mb-4 text-orange-500 dark:text-orange-400 group-hover:bg-orange-200 dark:group-hover:bg-orange-500/20 transition-colors">
-                        <i data-lucide="layout" class="w-6 h-6"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-2">ブログ</h3>
-                    <p class="text-stone-600 dark:text-stone-400 text-sm mb-4 leading-relaxed">
-                        Hugoを用いた高速なブログを運用しています、画像の制作秘話なども掲載しています。
-                    </p>
-                    <div class="flex flex-wrap gap-2 mt-auto">
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Hugo</span>
-                        <span class="px-2 py-1 rounded text-[10px] font-mono bg-stone-100 dark:bg-white/5 border border-stone-200 dark:border-white/10 text-stone-500 dark:text-stone-400">Tailwind</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dynamic Content: Blog & Music -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Latest Blog -->
-            <div class="lg:col-span-2 glass-panel p-6 rounded-xl">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
-                        <i data-lucide="pen-tool" class="text-orange-500 w-5 h-5"></i>
-                        最新の記事
-                    </h2>
-                    <a href="https://blog.ffnet.work" class="text-xs text-orange-600 dark:text-orange-500 hover:text-stone-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                        すべて見る <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                    </a>
-                </div>
-                <ul id="blog-list" class="space-y-4">
-                    <!-- JS Injected -->
-                    <li class="animate-pulse flex space-x-4">
-                        <div class="flex-1 space-y-2 py-1">
-                            <div class="h-4 bg-stone-200 dark:bg-stone-800 rounded w-3/4"></div>
-                            <div class="h-4 bg-stone-200 dark:bg-stone-800 rounded w-1/2"></div>
+                <!-- Now Playing Widget -->
+                <section id="now-playing" class="glass-panel p-6 rounded-3xl relative overflow-hidden group">
+                    <div class="flex items-center justify-between mb-5">
+                        <span class="text-[10px] font-mono text-stone-500 uppercase tracking-widest flex items-center gap-2">
+                            <span class="relative flex h-2 w-2">
+                                <span id="np-indicator" class="relative inline-flex rounded-full h-2 w-2 bg-stone-700 transition-colors"></span>
+                            </span>
+                            Listening Now
+                        </span>
+                        <div id="np-visualizer" class="visualizer flex items-end h-4 opacity-0 transition-opacity">
+                            <span style="animation-delay: 0.1s"></span>
+                            <span style="animation-delay: 0.3s"></span>
+                            <span style="animation-delay: 0.2s"></span>
                         </div>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Now Playing -->
-            <div class="lg:col-span-1 glass-panel p-6 rounded-xl border-l-4 border-l-transparent transition-colors" id="music-panel">
-                <div class="flex items-center gap-2 mb-6">
-                    <h2 class="text-lg font-bold text-stone-900 dark:text-white flex items-center gap-2">
-                        <i data-lucide="headphones" class="text-amber-500 w-5 h-5"></i>
-                        再生中
-                    </h2>
-                    <span id="live-indicator" class="hidden w-2 h-2 bg-amber-500 rounded-full animate-pulse-slow shadow-[0_0_10px_rgba(245,158,11,0.5)]"></span>
-                </div>
-                
-                <div id="lastfm-widget" class="flex flex-col items-center text-center gap-4 py-4">
-                    <div class="bg-stone-100 dark:bg-stone-800 p-4 rounded-full">
-                        <i data-lucide="music" class="w-8 h-8 text-stone-400 dark:text-stone-600"></i>
                     </div>
-                    <p class="text-stone-500 text-sm">再生停止中...</p>
-                </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-stone-900 flex items-center justify-center border border-white/5 overflow-hidden relative shadow-inner">
+                            <i id="np-icon" data-lucide="music" class="w-6 h-6 text-stone-700"></i>
+                            <img id="np-art" src="" class="absolute inset-0 w-full h-full object-cover hidden" alt="">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 id="np-title" class="text-stone-100 font-bold truncate text-base leading-tight">Searching for signal...</h3>
+                            <p id="np-artist" class="text-stone-500 text-xs truncate mt-1">Idle State</p>
+                        </div>
+                    </div>
+                    <div id="np-progress-container" class="mt-5 h-1 bg-stone-800 rounded-full overflow-hidden opacity-0 transition-opacity duration-700">
+                        <div id="np-progress-bar" class="h-full bg-orange-500 w-0 transition-all duration-[1000ms] linear shadow-[0_0_10px_rgba(249,115,22,0.4)]"></div>
+                    </div>
+                </section>
+
+                <!-- SNS Connections -->
+                <nav class="space-y-4">
+                    <h2 class="text-[10px] font-mono text-stone-600 uppercase tracking-widest border-b border-white/5 pb-2">Connect</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="https://mi.ffnet.work" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
+                            <i data-lucide="earth" class="w-5 h-5 text-green-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold">Misskey</span>
+                        </a>
+                        <a href="https://akkoma.noellabo.jp/shunature" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
+                            <i data-lucide="earth" class="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold">Akkoma</span>
+                        </a>
+                        <a href="https://github.com/dreambgnw" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
+                            <i data-lucide="github" class="w-5 h-5 text-stone-300 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold">GitHub</span>
+                        </a>
+                        <a href="https://signal.me/#eu/m81TbpYpae9qUsL3SK2HkY9NnEzHpuBODVw3PZwdg4uHN1hupMpB4biJUwcuAI-f" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
+                            <i data-lucide="message-square" class="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-sm font-bold">Signal</span>
+                        </a>
+                    </div>
+                </nav>
             </div>
 
-        </section>
+            <!-- Right Column: Journal List -->
+            <div class="lg:col-span-8 space-y-8">
+                <section id="blog" class="glass-panel p-8 lg:p-10 rounded-[2.5rem]">
+                    <div class="flex items-center justify-between mb-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                                <i data-lucide="newspaper" class="text-orange-500 w-6 h-6"></i>
+                            </div>
+                            <h2 class="text-3xl font-black text-white tracking-tight uppercase">Journal</h2>
+                        </div>
+                        <a href="https://blog.ffnet.work" target="_blank" class="text-xs font-mono text-stone-500 hover:text-orange-500 transition-colors uppercase tracking-widest font-bold">
+                            View Archive <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Simplified List Format -->
+                    <ul id="blog-list" class="divide-y divide-stone-800">
+                        <!-- Skeleton loader -->
+                        <div class="animate-pulse space-y-8 py-4">
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-stone-800 rounded w-3/4"></div>
+                                <div class="h-3 bg-stone-800 rounded w-16"></div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="h-5 bg-stone-800 rounded w-2/3"></div>
+                                <div class="h-3 bg-stone-800 rounded w-16"></div>
+                            </div>
+                        </div>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
 
-    </main>
-
-    <footer class="py-8 text-center text-stone-500 dark:text-stone-600 text-sm font-mono border-t border-stone-200 dark:border-white/5 bg-stone-50 dark:bg-[#0c0a09] transition-colors duration-300">
-        <p>&copy; 2025 Shun Tonegawa. Powered by NixOS & Cloudflare.</p>
+    <footer class="py-16 text-center text-stone-600 text-[10px] font-mono border-t border-white/5 bg-brand-dark/50 backdrop-blur-md mt-12">
+        <p class="mb-3 tracking-[0.4em] uppercase font-black text-stone-500">&copy; 2026 Shun Tonegawa</p>
+        <p>Stay creative. Keep building.</p>
     </footer>
 
-    <!-- Logic Script -->
     <script>
-        // Icons
         lucide.createIcons();
 
-        // Configuration
-        // ==========================================
-        const BLOG_RSS_URL = 'https://blog.ffnet.work/rss/'; 
-        const LASTFM_USER = 'shunature';
-        const LASTFM_API_KEY = 'c854fb5e1feccdae09ecd2bd97801f75';
-        // ==========================================
+        /* --- Blog RSS Fetch (Simplified List) --- */
+        const BLOG_RSS_URL = 'https://blog.ffnet.work/index.xml';
+        const RSS_API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_RSS_URL)}`;
 
-        // 1. Fetch Blog Posts (RSS -> JSON)
         async function fetchBlog() {
             const list = document.getElementById('blog-list');
-            const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_RSS_URL)}`;
-
             try {
-                const res = await fetch(api);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const res = await fetch(RSS_API);
                 const data = await res.json();
+                
+                if (data.status === 'ok' && data.items) {
+                    list.innerHTML = '';
+                    data.items.slice(0, 8).forEach(item => {
+                        const date = new Date(item.pubDate).toLocaleDateString('ja-JP', {
+                            month: '2-digit', day: '2-digit'
+                        });
+                        const year = new Date(item.pubDate).getFullYear();
 
-                if(data.status === 'ok') {
-                    list.innerHTML = ''; 
-                    data.items.slice(0, 3).forEach(item => {
-                        const date = new Date(item.pubDate).toLocaleDateString('ja-JP');
                         const li = document.createElement('li');
-                        li.className = 'group border-b border-stone-100 dark:border-white/5 pb-3 last:border-0 last:pb-0';
                         li.innerHTML = `
-                            <a href="${item.link}" target="_blank" class="block">
-                                <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                                    <h3 class="text-stone-700 dark:text-stone-300 font-medium group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-1">${item.title}</h3>
-                                    <span class="text-xs text-stone-500 font-mono whitespace-nowrap bg-stone-100 dark:bg-white/5 px-2 py-0.5 rounded">${date}</span>
+                            <a href="${item.link}" target="_blank" class="group flex items-baseline justify-between py-5 border-b border-stone-800/50 hover:border-orange-500/50 transition-all overflow-hidden">
+                                <h3 class="text-lg font-medium text-stone-300 group-hover:text-orange-500 transition-colors truncate pr-4">
+                                    ${item.title}
+                                </h3>
+                                <div class="shrink-0 font-mono text-xs text-stone-600 group-hover:text-orange-400 transition-colors">
+                                    <span class="hidden sm:inline opacity-50 mr-1">${year}/</span>${date}
                                 </div>
                             </a>
                         `;
                         list.appendChild(li);
                     });
-                } else {
-                    throw new Error('RSS status not ok');
                 }
             } catch (e) {
-                list.innerHTML = `
-                    <li class="text-stone-500 text-sm py-4 text-center border border-dashed border-stone-300 dark:border-stone-800 rounded-lg">
-                        記事の読み込みに失敗しました<br>
-                        <span class="text-xs opacity-50">ネットワーク設定を確認してください</span>
-                    </li>
-                `;
+                list.innerHTML = `<p class="py-12 text-center text-stone-700 text-sm font-mono tracking-widest uppercase">Journal Offline</p>`;
             }
         }
 
-        // 2. Fetch Last.fm
-        async function fetchMusic() {
-            const widget = document.getElementById('lastfm-widget');
-            const indicator = document.getElementById('live-indicator');
-            const panel = document.getElementById('music-panel');
-            
-            if(LASTFM_USER === 'YOUR_LASTFM_USER' || !LASTFM_USER) return;
+        /* --- Now Playing (Last.fm API) --- */
+        const LASTFM_API_KEY = 'c854fb5e1feccdae09ecd2bd97801f75'; 
+        const LASTFM_USER = 'shunature';
 
-            const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
+        let currentTrackId = "";
+        let progressWidth = 0;
+        let progressInterval;
+
+        async function updateNowPlaying() {
+            const titleEl = document.getElementById('np-title');
+            const artistEl = document.getElementById('np-artist');
+            const indicatorEl = document.getElementById('np-indicator');
+            const visualizerEl = document.getElementById('np-visualizer');
+            const progressContainer = document.getElementById('np-progress-container');
+            const progressBox = document.getElementById('np-progress-bar');
+            const iconEl = document.getElementById('np-icon');
+            const artEl = document.getElementById('np-art');
 
             try {
-                const res = await fetch(url);
+                const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
                 const data = await res.json();
                 
-                if (!data || !data.recenttracks) return;
+                if (!data.recenttracks || !data.recenttracks.track || data.recenttracks.track.length === 0) return;
 
                 const track = data.recenttracks.track[0];
+                const isPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
+                const trackId = track.name + track.artist['#text'];
 
-                if(track) {
-                    const isPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
-                    const image = track.image && track.image[3] ? track.image[3]['#text'] : null; // Large size
+                if (trackId !== currentTrackId) {
+                    currentTrackId = trackId;
+                    progressWidth = 0; 
+                    progressBox.style.width = '0%';
+                }
 
-                    let html = '';
-                    if(image) {
-                        html += `<img src="${image}" alt="Album Art" class="w-24 h-24 rounded-lg shadow-lg border border-stone-200 dark:border-stone-700 mb-2 object-cover">`;
-                    } else {
-                        html += `<div class="bg-stone-100 dark:bg-stone-800 p-4 rounded-full mb-2"><i data-lucide="music" class="w-8 h-8 text-stone-400 dark:text-stone-500"></i></div>`;
+                titleEl.innerText = track.name;
+                artistEl.innerText = track.artist['#text'];
+
+                const artUrl = track.image.find(img => img.size === 'large')?.['#text'];
+                if (artUrl && artUrl !== "") {
+                    artEl.src = artUrl;
+                    artEl.classList.remove('hidden');
+                    iconEl.classList.add('hidden');
+                } else {
+                    artEl.classList.add('hidden');
+                    iconEl.classList.remove('hidden');
+                }
+
+                if (isPlaying) {
+                    indicatorEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-orange-500 animate-pulse';
+                    visualizerEl.classList.remove('opacity-0');
+                    progressContainer.classList.remove('opacity-0');
+                    
+                    if (!progressInterval) {
+                        progressInterval = setInterval(() => {
+                            if (progressWidth < 100) {
+                                progressWidth += 0.2;
+                                progressBox.style.width = progressWidth + '%';
+                            }
+                        }, 1000);
                     }
-
-                    html += `
-                        <div class="text-center w-full">
-                            <p class="text-stone-900 dark:text-white font-bold truncate text-base mb-1">${track.name}</p>
-                            <p class="text-stone-500 dark:text-stone-400 text-sm truncate">${track.artist['#text']}</p>
-                        </div>
-                    `;
-
-                    widget.innerHTML = html;
-                    lucide.createIcons(); 
-
-                    if(isPlaying) {
-                        indicator.classList.remove('hidden');
-                        panel.classList.add('border-l-amber-500');
-                    } else {
-                        indicator.classList.add('hidden');
-                        panel.classList.remove('border-l-amber-500');
-                        panel.classList.add('border-l-stone-200', 'dark:border-l-stone-800');
+                } else {
+                    indicatorEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-stone-700';
+                    visualizerEl.classList.add('opacity-0');
+                    progressContainer.classList.add('opacity-0');
+                    if (progressInterval) {
+                        clearInterval(progressInterval);
+                        progressInterval = null;
                     }
                 }
             } catch (e) {
-                // Silent fail
+                console.error('Last.fm Sync Failed:', e);
             }
         }
 
-        // Init
         fetchBlog();
-        fetchMusic();
-        
-        // Refresh Music every 30s
-        setInterval(fetchMusic, 30000);
-
+        updateNowPlaying();
+        setInterval(updateNowPlaying, 30000);
     </script>
 </body>
 </html>

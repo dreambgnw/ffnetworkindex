@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shun Tonegawa | QUICK INSTANT</title>
-    
-    <!-- Nostr NIP-05 Verification -->
-    <meta property="nostr:nip05" content="shun@ffnet.work" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +12,7 @@
 
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script src="./lastfm.js"></script>    
     <script>
         tailwind.config = {
             theme: {
@@ -222,8 +219,9 @@
     </div>
 
     <footer class="py-16 text-center text-stone-600 text-[10px] font-mono border-t border-white/5 bg-brand-dark/50 backdrop-blur-md mt-12">
-        <p class="mb-3 tracking-[0.4em] uppercase font-black text-stone-500">&copy; 2026 Shun Tonegawa</p>
-        <p>Stay creative. Keep building.</p>
+        <p class="mb-3 tracking-[0.4em] uppercase font-black text-stone-500">&copy; 2026 - Shun Tonegawa<br></p>
+        <p>Designed by <a href="https://gemini.google.com" target="_blank">Gemini</a></p>
+        <p>Always Chillout</p>
     </footer>
 
     <script>
@@ -263,80 +261,6 @@
                 }
             } catch (e) {
                 list.innerHTML = `<p class="py-12 text-center text-stone-700 text-sm font-mono tracking-widest uppercase">Journal Offline</p>`;
-            }
-        }
-
-        /* --- Now Playing (Last.fm API) --- */
-        const LASTFM_API_KEY = 'c854fb5e1feccdae09ecd2bd97801f75'; 
-        const LASTFM_USER = 'shunature';
-
-        let currentTrackId = "";
-        let progressWidth = 0;
-        let progressInterval;
-
-        async function updateNowPlaying() {
-            const titleEl = document.getElementById('np-title');
-            const artistEl = document.getElementById('np-artist');
-            const indicatorEl = document.getElementById('np-indicator');
-            const visualizerEl = document.getElementById('np-visualizer');
-            const progressContainer = document.getElementById('np-progress-container');
-            const progressBox = document.getElementById('np-progress-bar');
-            const iconEl = document.getElementById('np-icon');
-            const artEl = document.getElementById('np-art');
-
-            try {
-                const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
-                const data = await res.json();
-                
-                if (!data.recenttracks || !data.recenttracks.track || data.recenttracks.track.length === 0) return;
-
-                const track = data.recenttracks.track[0];
-                const isPlaying = track['@attr'] && track['@attr'].nowplaying === 'true';
-                const trackId = track.name + track.artist['#text'];
-
-                if (trackId !== currentTrackId) {
-                    currentTrackId = trackId;
-                    progressWidth = 0; 
-                    progressBox.style.width = '0%';
-                }
-
-                titleEl.innerText = track.name;
-                artistEl.innerText = track.artist['#text'];
-
-                const artUrl = track.image.find(img => img.size === 'large')?.['#text'];
-                if (artUrl && artUrl !== "") {
-                    artEl.src = artUrl;
-                    artEl.classList.remove('hidden');
-                    iconEl.classList.add('hidden');
-                } else {
-                    artEl.classList.add('hidden');
-                    iconEl.classList.remove('hidden');
-                }
-
-                if (isPlaying) {
-                    indicatorEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-orange-500 animate-pulse';
-                    visualizerEl.classList.remove('opacity-0');
-                    progressContainer.classList.remove('opacity-0');
-                    
-                    if (!progressInterval) {
-                        progressInterval = setInterval(() => {
-                            if (progressWidth < 100) {
-                                progressWidth += 0.2;
-                                progressBox.style.width = progressWidth + '%';
-                            }
-                        }, 1000);
-                    }
-                } else {
-                    indicatorEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-stone-700';
-                    visualizerEl.classList.add('opacity-0');
-                    progressContainer.classList.add('opacity-0');
-                    if (progressInterval) {
-                        clearInterval(progressInterval);
-                        progressInterval = null;
-                    }
-                }
-            } catch (e) {
-                console.error('Last.fm Sync Failed:', e);
             }
         }
 

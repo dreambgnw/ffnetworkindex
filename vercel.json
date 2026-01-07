@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/((?!.well-known/).*)",
-      "destination": "https://www.ffnet.work/$1",
+      "destination": "https://ffnet.work/$1",
       "permanent": true
     }
   ]

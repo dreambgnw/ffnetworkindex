@@ -1,8 +1,9 @@
 {
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/.well-known/:path*",
-      "destination": "/.well-known/:path*"
+      "source": "/((?!.well-known/).*)",
+      "destination": "https://www.ffnet.work/$1",
+      "permanent": true
     }
   ]
 }

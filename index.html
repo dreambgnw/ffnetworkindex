@@ -3,33 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shun Tonegawa</title>
+    <title>Shun Tonegawa - Portfolio</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS (CDN) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./lastfm.js"></script>    
+    <script src="./lastfm.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Noto Sans JP"', 'Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['"Noto Sans JP"', '"Space Grotesk"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        brand: {
-                            orange: '#f97316',
-                            amber: '#fbbf24',
-                            dark: '#0c0a09',
+                        primary: {
+                            orange: '#ff6b35',
+                            dark: '#0a0a0a',
+                            darker: '#050505',
                         }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -38,196 +35,538 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <style type="text/css">
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0c0a09; }
-        ::-webkit-scrollbar-thumb { background: #292524; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
-        
-        /* Glass Panel */
-        .glass-panel {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            background: rgba(28, 25, 23, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff6b35; }
+
+        /* Gradient Background */
+        body {
+            background: radial-gradient(ellipse at top, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(255, 107, 53, 0.03) 0%, transparent 50%),
+                        #0a0a0a;
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .glass-panel:hover {
-            border: 1px solid rgba(249, 115, 22, 0.3);
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 53, 0.2);
         }
-        
-        /* Background Grid */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+
+        /* Animated Border */
+        .animated-border {
+            position: relative;
+            background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+                        linear-gradient(90deg, transparent, #ff6b35, transparent) border-box;
+            border: 1px solid transparent;
+        }
+
+        /* Grid Pattern */
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
 
         /* Glow Effect */
-        .text-glow-orange {
-            color: #f97316;
-            text-shadow: 0 0 25px rgba(249, 115, 22, 0.5);
+        .glow-orange {
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
         }
 
-        /* Music Visualizer */
-        .visualizer span {
+        /* Music Bars Animation */
+        .music-bar {
             display: inline-block;
             width: 3px;
-            background: #f97316;
-            margin-right: 1.5px;
-            animation: v-bounce 1s ease-in-out infinite;
-        }
-        @keyframes v-bounce {
-            0%, 100% { height: 4px; }
-            50% { height: 16px; }
+            height: 16px;
+            background: #ff6b35;
+            margin: 0 1.5px;
+            animation: music-bounce 0.8s ease-in-out infinite;
         }
 
-        /* Background Blobs */
-        .blob {
+        @keyframes music-bounce {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1); }
+        }
+
+        .music-bar:nth-child(1) { animation-delay: 0s; }
+        .music-bar:nth-child(2) { animation-delay: 0.15s; }
+        .music-bar:nth-child(3) { animation-delay: 0.3s; }
+        .music-bar:nth-child(4) { animation-delay: 0.45s; }
+
+        /* Link Underline Animation */
+        .link-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .link-underline::after {
+            content: '';
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: #ff6b35;
+            transition: width 0.3s ease;
+        }
+
+        .link-underline:hover::after {
+            width: 100%;
+        }
+
+        /* Profile Image Border Animation */
+        @keyframes rotate-border {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .rotating-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #ff6b35, transparent, #ff6b35);
+            border-radius: 24px;
             z-index: -1;
-            opacity: 0.15;
-            animation: pulse 8s infinite alternate;
+            animation: rotate-border 3s linear infinite;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 280px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Mobile Sidebar Animation */
+        @media (max-width: 1023px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 1024px) {
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Hamburger Menu Animation */
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger span:not(:last-child) {
+            margin-bottom: 5px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
         }
     </style>
 </head>
-<body class="bg-brand-dark text-stone-200 antialiased min-h-screen selection:bg-orange-500 selection:text-white overflow-x-hidden bg-grid">
+<body class="text-stone-100 antialiased min-h-screen selection:bg-orange-500 selection:text-white grid-pattern">
 
-    <!-- Background Elements -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="blob w-[500px] h-[500px] bg-orange-600 top-[-10%] right-[-5%]"></div>
-        <div class="blob w-[300px] h-[300px] bg-amber-600 bottom-[-5%] left-[-5%]" style="animation-delay: -4s;"></div>
-    </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay lg:hidden" id="menuOverlay"></div>
 
-    <div class="container mx-auto px-4 py-8 lg:py-24 max-w-6xl">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
-            <!-- Left Column: Profile -->
-            <div class="lg:col-span-4 space-y-10 lg:sticky lg:top-24">
-                <header class="space-y-6 text-center lg:text-left">
-                    <div class="relative inline-block group">
-                        <div class="w-32 h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-orange-500 to-amber-500 p-[2px] shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                            <img src="https://image.nostr.build/bfdd902d28111cd56afc671b50bc49ac6ebc02e09760e7d4b1f3a8bc32784937.png" alt="Shun" class="w-full h-full rounded-3xl object-cover bg-stone-900">
-                        </div>
-                        <div class="absolute -bottom-2 -right-2 w-12 h-12 rounded-full bg-brand-dark border-2 border-orange-500 flex items-center justify-center shadow-lg text-2xl select-none">
-                            🌴
-                        </div>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="p-6 space-y-8">
+            <!-- Profile Section -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                        S
                     </div>
-                    
-                    <div>
-                        <h1 class="text-4xl lg:text-5xl font-black text-white tracking-tighter text-glow-orange">Shun Tonegawa</h1>
-                        <p class="text-orange-500 font-mono text-sm mt-2 uppercase tracking-[0.3em] font-bold">shunature</p>
+                    <div class="min-w-0">
+                        <h1 class="text-lg font-bold text-white truncate">Shun Tonegawa</h1>
+                        <p class="text-xs text-stone-500 font-mono">shunature</p>
                     </div>
+                </div>
+                
+                <div class="relative group mx-auto w-32 h-32">
+                    <div class="w-full h-full rounded-2xl overflow-hidden border-2 border-orange-500/20 relative rotating-border">
+                        <img src="https://image.nostr.build/bfdd902d28111cd56afc671b50bc49ac6ebc02e09760e7d4b1f3a8bc32784937.png" 
+                             alt="Shun Tonegawa" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-2xl shadow-2xl border-2 border-primary-dark">
+                        🌴
+                    </div>
+                </div>
 
-                    <p class="text-stone-400 leading-relaxed text-base max-w-sm mx-auto lg:mx-0">
-                        よくモノを作っています<br>
-                        リンク集は<a href="https://hogus.work/post/links" class="text-orange-500 hover:text-orange-400">こちら</a>
-                    </p>
-                </header>
-
-                <!-- Now Playing Widget -->
-                <section id="now-playing" class="glass-panel p-6 rounded-3xl relative overflow-hidden group">
-                    <div class="flex items-center justify-between mb-5">
-                        <span class="text-[10px] font-mono text-stone-500 uppercase tracking-widest flex items-center gap-2">
-                            <span class="relative flex h-2 w-2">
-                                <span id="np-indicator" class="relative inline-flex rounded-full h-2 w-2 bg-stone-700 transition-colors"></span>
-                            </span>
-                            Listening Now
-                        </span>
-                        <div id="np-visualizer" class="visualizer flex items-end h-4 opacity-0 transition-opacity">
-                            <span style="animation-delay: 0.1s"></span>
-                            <span style="animation-delay: 0.3s"></span>
-                            <span style="animation-delay: 0.2s"></span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-stone-900 flex items-center justify-center border border-white/5 overflow-hidden relative shadow-inner">
-                            <i id="np-icon" data-lucide="music" class="w-6 h-6 text-stone-700"></i>
-                            <img id="np-art" src="" class="absolute inset-0 w-full h-full object-cover hidden" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <h3 id="np-title" class="text-stone-100 font-bold truncate text-base leading-tight">Searching for signal...</h3>
-                            <p id="np-artist" class="text-stone-500 text-xs truncate mt-1">Idle State</p>
-                        </div>
-                    </div>
-                    <div id="np-progress-container" class="mt-5 h-1 bg-stone-800 rounded-full overflow-hidden opacity-0 transition-opacity duration-700">
-                        <div id="np-progress-bar" class="h-full bg-orange-500 w-0 transition-all duration-[1000ms] linear shadow-[0_0_10px_rgba(249,115,22,0.4)]"></div>
-                    </div>
-                </section>
-
-                <!-- SNS Connections -->
-                <nav class="space-y-4">
-                    <h2 class="text-[10px] font-mono text-stone-600 uppercase tracking-widest border-b border-white/5 pb-2">Connect</h2>
-                    <div class="grid grid-cols-2 gap-3">
-                        <a href="https://mi.ffnet.work/@shunature" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
-                            <i data-lucide="earth" class="w-5 h-5 text-yellow-400 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-sm font-bold">Sunset Obs.</span>
-                        </a>
-                        <a href="https://nostx.io/ffnet.work" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
-                            <i data-lucide="earth" class="w-5 h-5 text-purple-500 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-sm font-bold">Nostr</span>
-                        </a>
-                        <a href="https://www.last.fm/user/shunature" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
-                            <i data-lucide="play" class="w-5 h-5 text-red-800 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-sm font-bold">Last.fm</span>
-                        </a>
-                        <a href="https://signal.me/#eu/m81TbpYpae9qUsL3SK2HkY9NnEzHpuBODVw3PZwdg4uHN1hupMpB4biJUwcuAI-f" target="_blank" class="glass-panel p-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500/10 group">
-                            <i data-lucide="message-square" class="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform"></i>
-                            <span class="text-sm font-bold">Signal</span>
-                        </a>
-                    </div>
-                </nav>
+                <p class="text-sm text-stone-400 leading-relaxed text-center">
+                    よくモノを作っています<br>
+                    リンク集は<a href="https://hogus.work/post/links" class="text-orange-500 hover:text-orange-400 link-underline font-medium">こちら</a>
+                </p>
             </div>
 
-            <!-- Right Column: Journal List -->
-            <div class="lg:col-span-8 space-y-8">
-                <section id="blog" class="glass-panel p-8 lg:p-10 rounded-[2.5rem]">
-                    <div class="flex items-center justify-between mb-10">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                                <i data-lucide="newspaper" class="text-orange-500 w-6 h-6"></i>
-                            </div>
-                            <h2 class="text-3xl font-black text-white tracking-tight uppercase">Journal</h2>
-                        </div>
-                        <a href="https://hogus.work" target="_blank" class="text-xs font-mono text-stone-500 hover:text-orange-500 transition-colors uppercase tracking-widest font-bold">
-                            View Archive <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
-                        </a>
-                    </div>
-                    
-                    <!-- Simplified List Format -->
-                    <ul id="blog-list" class="divide-y divide-stone-800">
-                        <!-- Skeleton loader -->
-                        <div class="animate-pulse space-y-8 py-4">
-                            <div class="flex justify-between items-center">
-                                <div class="h-5 bg-stone-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-stone-800 rounded w-16"></div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div class="h-5 bg-stone-800 rounded w-2/3"></div>
-                                <div class="h-3 bg-stone-800 rounded w-16"></div>
-                            </div>
-                        </div>
-                    </ul>
-                </section>
+            <!-- Navigation -->
+            <nav class="space-y-2">
+                <h3 class="text-xs font-mono text-stone-600 uppercase tracking-widest mb-3">Navigation</h3>
+                <a href="#works" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-stone-400 hover:text-orange-500 hover:bg-stone-900/50 transition-all group">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                    <span class="font-medium">Works</span>
+                </a>
+                <a href="#music" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-stone-400 hover:text-orange-500 hover:bg-stone-900/50 transition-all group">
+                    <i data-lucide="music" class="w-5 h-5"></i>
+                    <span class="font-medium">Music</span>
+                </a>
+                <a href="#journal" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-stone-400 hover:text-orange-500 hover:bg-stone-900/50 transition-all group">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                    <span class="font-medium">Journal</span>
+                </a>
+            </nav>
+
+            <!-- Connect Links -->
+            <div class="space-y-2">
+                <h3 class="text-xs font-mono text-stone-600 uppercase tracking-widest mb-3">Connect</h3>
+                <a href="https://mi.ffnet.work/@shunature" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-yellow-500 hover:bg-stone-900/30 transition-all">
+                    <i data-lucide="earth" class="w-4 h-4"></i>
+                    <span>Sunset Obs.</span>
+                </a>
+                <a href="https://nostx.io/ffnet.work" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-purple-500 hover:bg-stone-900/30 transition-all">
+                    <i data-lucide="radio" class="w-4 h-4"></i>
+                    <span>Nostr</span>
+                </a>
+                <a href="https://www.last.fm/user/shunature" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-red-500 hover:bg-stone-900/30 transition-all">
+                    <i data-lucide="headphones" class="w-4 h-4"></i>
+                    <span>Last.fm</span>
+                </a>
+                <a href="https://signal.me/#eu/m81TbpYpae9qUsL3SK2HkY9NnEzHpuBODVw3PZwdg4uHN1hupMpB4biJUwcuAI-f" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-blue-500 hover:bg-stone-900/30 transition-all">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span>Signal</span>
+                </a>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="pt-4 border-t border-stone-900">
+                <p class="text-xs text-stone-600 text-center font-mono">
+                    &copy; 2026<br>
+                    Always Chillout
+                </p>
             </div>
         </div>
-    </div>
+    </aside>
 
-    <footer class="py-16 text-center text-stone-600 text-[10px] font-mono border-t border-white/5 bg-brand-dark/50 backdrop-blur-md mt-12">
-        <p class="mb-3 tracking-[0.4em] uppercase font-black text-stone-500">&copy; 2026 - Shun Tonegawa<br></p>
-        <p>Designed by <a href="https://gemini.google.com" target="_blank">Gemini</a></p>
-        <p>Always Chillout</p>
-    </footer>
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-primary-darker/95 backdrop-blur-xl border-b border-stone-900">
+        <div class="flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-lg font-bold">
+                    S
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-white">Shun Tonegawa</h1>
+                    <p class="text-xs text-stone-500 font-mono">shunature</p>
+                </div>
+            </div>
+            <button id="menuToggle" class="hamburger p-2 hover:bg-stone-900/50 rounded-lg transition-colors">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-content">
+        
+        <!-- Main Content -->
+        <main class="pt-20 lg:pt-0">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
+                
+                <!-- Works/Portfolio Section -->
+                <section id="works" class="mb-16">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                            <i data-lucide="layers" class="w-6 h-6 text-orange-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Works</h3>
+                            <p class="text-xs text-stone-500 font-mono">Selected Projects</p>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <!-- Project Card 1 -->
+                        <div class="group bg-stone-950/50 border border-stone-900 rounded-2xl overflow-hidden card-hover">
+                            <div class="aspect-video bg-gradient-to-br from-orange-500/20 to-stone-900 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <i data-lucide="code" class="w-16 h-16 text-orange-500/30"></i>
+                                </div>
+                                <!-- プロジェクトの画像をここに追加できます -->
+                                <!-- <img src="project-image.jpg" class="w-full h-full object-cover" alt="Project"> -->
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-mono text-orange-500 px-2 py-1 bg-orange-500/10 rounded border border-orange-500/20">Web App</span>
+                                    <span class="text-xs font-mono text-stone-600">2026</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">Project Name</h4>
+                                <p class="text-sm text-stone-400 leading-relaxed mb-4">
+                                    プロジェクトの説明文がここに入ります。何を作ったのか、どんな技術を使ったのかを簡潔に。
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">React</span>
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">TypeScript</span>
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">Tailwind</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 2 -->
+                        <div class="group bg-stone-950/50 border border-stone-900 rounded-2xl overflow-hidden card-hover">
+                            <div class="aspect-video bg-gradient-to-br from-purple-500/20 to-stone-900 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <i data-lucide="terminal" class="w-16 h-16 text-purple-500/30"></i>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-mono text-purple-500 px-2 py-1 bg-purple-500/10 rounded border border-purple-500/20">CLI Tool</span>
+                                    <span class="text-xs font-mono text-stone-600">2025</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">Another Project</h4>
+                                <p class="text-sm text-stone-400 leading-relaxed mb-4">
+                                    2つ目のプロジェクト説明。便利なツールやアプリケーションの紹介。
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">Node.js</span>
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">CLI</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 3 -->
+                        <div class="group bg-stone-950/50 border border-stone-900 rounded-2xl overflow-hidden card-hover">
+                            <div class="aspect-video bg-gradient-to-br from-blue-500/20 to-stone-900 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <i data-lucide="smartphone" class="w-16 h-16 text-blue-500/30"></i>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-mono text-blue-500 px-2 py-1 bg-blue-500/10 rounded border border-blue-500/20">Mobile</span>
+                                    <span class="text-xs font-mono text-stone-600">2025</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">Mobile App</h4>
+                                <p class="text-sm text-stone-400 leading-relaxed mb-4">
+                                    モバイルアプリケーションの説明。使いやすいUIと便利な機能。
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">React Native</span>
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">Expo</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 4 -->
+                        <div class="group bg-stone-950/50 border border-stone-900 rounded-2xl overflow-hidden card-hover">
+                            <div class="aspect-video bg-gradient-to-br from-green-500/20 to-stone-900 relative overflow-hidden">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <i data-lucide="globe" class="w-16 h-16 text-green-500/30"></i>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-mono text-green-500 px-2 py-1 bg-green-500/10 rounded border border-green-500/20">Website</span>
+                                    <span class="text-xs font-mono text-stone-600">2024</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">Web Project</h4>
+                                <p class="text-sm text-stone-400 leading-relaxed mb-4">
+                                    Webサイトやランディングページの制作。レスポンシブデザイン。
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">HTML/CSS</span>
+                                    <span class="text-xs px-2 py-1 bg-stone-900 border border-stone-800 rounded text-stone-400">JavaScript</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Now Playing Section -->
+                <section id="music" class="mb-16">
+                    <div class="bg-stone-950/50 border border-stone-900 rounded-3xl p-8 md:p-10 card-hover">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                                    <i data-lucide="music" class="w-6 h-6 text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white">Now Playing</h3>
+                                    <p class="text-xs text-stone-500 font-mono">Last.fm Integration</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div id="np-visualizer" class="hidden items-center h-4 opacity-0 transition-opacity">
+                                    <span class="music-bar"></span>
+                                    <span class="music-bar"></span>
+                                    <span class="music-bar"></span>
+                                    <span class="music-bar"></span>
+                                </div>
+                                <div class="relative flex items-center gap-2">
+                                    <span id="np-indicator" class="w-2 h-2 rounded-full bg-stone-700 transition-all"></span>
+                                    <span id="np-status" class="text-xs font-mono text-stone-600 uppercase">Idle</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-6">
+                            <div class="relative w-24 h-24 rounded-2xl bg-stone-900 border border-stone-800 overflow-hidden flex-shrink-0">
+                                <i id="np-icon" data-lucide="disc" class="absolute inset-0 m-auto w-10 h-10 text-stone-700"></i>
+                                <img id="np-art" src="" class="w-full h-full object-cover hidden" alt="Album Art">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 id="np-title" class="text-2xl font-bold text-white mb-1 truncate">Searching for signal...</h4>
+                                <p id="np-artist" class="text-stone-400 truncate mb-3">Idle State</p>
+                                <div id="np-progress-container" class="w-full h-1.5 bg-stone-900 rounded-full overflow-hidden opacity-0 transition-opacity">
+                                    <div id="np-progress-bar" class="h-full bg-gradient-to-r from-orange-500 to-orange-600 w-0 transition-all duration-1000 shadow-[0_0_10px_rgba(255,107,53,0.5)]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Journal Section -->
+                <section id="journal" class="mb-16">
+                    <div class="bg-stone-950/50 border border-stone-900 rounded-3xl p-8 md:p-10">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                                    <i data-lucide="file-text" class="w-6 h-6 text-orange-500"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">Journal</h3>
+                                    <p class="text-xs text-stone-500 font-mono">Latest Posts</p>
+                                </div>
+                            </div>
+                            <a href="https://hogus.work" target="_blank" class="text-sm text-stone-400 hover:text-orange-500 transition-colors flex items-center gap-2 font-mono">
+                                View All
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                        
+                        <ul id="blog-list" class="space-y-1">
+                            <!-- Loading State -->
+                            <div class="animate-pulse space-y-4 py-4">
+                                <div class="flex justify-between items-center p-4">
+                                    <div class="h-5 bg-stone-900 rounded w-3/4"></div>
+                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
+                                </div>
+                                <div class="flex justify-between items-center p-4">
+                                    <div class="h-5 bg-stone-900 rounded w-2/3"></div>
+                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
+                                </div>
+                                <div class="flex justify-between items-center p-4">
+                                    <div class="h-5 bg-stone-900 rounded w-3/5"></div>
+                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-stone-900 bg-primary-darker/50 backdrop-blur-xl mt-20">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-center">
+                <p class="text-sm text-stone-500 font-mono mb-2">Designed by <a href="https://gemini.google.com" target="_blank" class="text-orange-500 hover:text-orange-400">Gemini</a> · Reimagined by Claude</p>
+            </div>
+        </footer>
+
+        </main>
+    </div>
 
     <script>
         lucide.createIcons();
 
-        /* --- Blog RSS Fetch (Simplified List) --- */
+        // Hamburger Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function toggleMenu() {
+            menuToggle.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking nav links on mobile
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                toggleMenu();
+            }
+        });
+
+        /* --- Blog RSS Fetch --- */
         const BLOG_RSS_URL = 'https://hogus.work/index.xml';
         const RSS_API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_RSS_URL)}`;
 
@@ -240,27 +579,37 @@
                 if (data.status === 'ok' && data.items) {
                     list.innerHTML = '';
                     data.items.slice(0, 8).forEach(item => {
-                        const date = new Date(item.pubDate).toLocaleDateString('ja-JP', {
-                            month: '2-digit', day: '2-digit'
+                        const date = new Date(item.pubDate);
+                        const formattedDate = date.toLocaleDateString('ja-JP', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
                         });
-                        const year = new Date(item.pubDate).getFullYear();
 
                         const li = document.createElement('li');
                         li.innerHTML = `
-                            <a href="${item.link}" target="_blank" class="group flex items-baseline justify-between py-5 border-b border-stone-800/50 hover:border-orange-500/50 transition-all overflow-hidden">
-                                <h3 class="text-lg font-medium text-stone-300 group-hover:text-orange-500 transition-colors truncate pr-4">
-                                    ${item.title}
-                                </h3>
-                                <div class="shrink-0 font-mono text-xs text-stone-600 group-hover:text-orange-400 transition-colors">
-                                    <span class="hidden sm:inline opacity-50 mr-1">${year}/</span>${date}
+                            <a href="${item.link}" target="_blank" 
+                               class="group flex items-center justify-between p-4 rounded-xl hover:bg-stone-900/50 transition-all">
+                                <div class="flex items-center gap-4 flex-1 min-w-0">
+                                    <div class="w-2 h-2 rounded-full bg-stone-700 group-hover:bg-orange-500 transition-colors flex-shrink-0"></div>
+                                    <h4 class="text-base font-medium text-stone-300 group-hover:text-orange-500 transition-colors truncate">
+                                        ${item.title}
+                                    </h4>
                                 </div>
+                                <time class="text-xs font-mono text-stone-600 group-hover:text-orange-400 transition-colors flex-shrink-0 ml-4">
+                                    ${formattedDate}
+                                </time>
                             </a>
                         `;
                         list.appendChild(li);
                     });
                 }
             } catch (e) {
-                list.innerHTML = `<p class="py-12 text-center text-stone-700 text-sm font-mono tracking-widest uppercase">Journal Offline</p>`;
+                list.innerHTML = `
+                    <div class="py-12 text-center">
+                        <p class="text-stone-600 text-sm font-mono">Failed to load journal entries</p>
+                    </div>
+                `;
             }
         }
 

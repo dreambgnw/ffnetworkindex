@@ -8,499 +8,241 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./lastfm.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Noto Sans JP"', '"Space Grotesk"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
+                        sans: ['"Inter"', '"Noto Sans JP"', 'sans-serif'],
                     },
                     colors: {
-                        primary: {
-                            orange: '#ff6b35',
-                            dark: '#0a0a0a',
-                            darker: '#050505',
-                        }
+                        brand: '#ff6b35', 
+                        dark: '#0a0a0a',
                     }
                 }
             }
         }
     </script>
-
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ff6b35; }
-
-        /* Gradient Background */
         body {
-            background: radial-gradient(ellipse at top, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-                        radial-gradient(ellipse at bottom right, rgba(255, 107, 53, 0.03) 0%, transparent 50%),
-                        #0a0a0a;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Card Hover Effects */
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 107, 53, 0.2);
-        }
+        /* スクロールバーの最小化 */
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; }
 
-        /* Animated Border */
-        .animated-border {
-            position: relative;
-            background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
-                        linear-gradient(90deg, transparent, #ff6b35, transparent) border-box;
-            border: 1px solid transparent;
+        .link-minimal {
+            transition: all 0.2s ease;
         }
+        .link-minimal:hover { color: #ff6b35; }
 
-        /* Grid Pattern */
-        .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        /* Glow Effect */
-        .glow-orange {
-            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
-        }
-
-        /* Music Bars Animation */
+        /* 音楽ビジュアライザー（バーのみ） */
         .music-bar {
             display: inline-block;
-            width: 3px;
-            height: 16px;
+            width: 1px;
+            height: 10px;
             background: #ff6b35;
-            margin: 0 1.5px;
+            margin: 0 1px;
             animation: music-bounce 0.8s ease-in-out infinite;
         }
-
         @keyframes music-bounce {
             0%, 100% { transform: scaleY(0.3); }
             50% { transform: scaleY(1); }
         }
 
-        .music-bar:nth-child(1) { animation-delay: 0s; }
-        .music-bar:nth-child(2) { animation-delay: 0.15s; }
-        .music-bar:nth-child(3) { animation-delay: 0.3s; }
-        .music-bar:nth-child(4) { animation-delay: 0.45s; }
-
-        /* Link Underline Animation */
-        .link-underline {
-            position: relative;
-            display: inline-block;
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
         }
-
-        .link-underline::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background: #ff6b35;
-            transition: width 0.3s ease;
-        }
-
-        .link-underline:hover::after {
-            width: 100%;
-        }
-
-        /* Profile Image Border Animation */
-        @keyframes rotate-border {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .rotating-border::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, #ff6b35, transparent, #ff6b35);
-            border-radius: 24px;
-            z-index: -1;
-            animation: rotate-border 3s linear infinite;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 280px;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 100;
-            overflow-y: auto;
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            z-index: 90;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Mobile Sidebar Animation */
-        @media (max-width: 1023px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-        }
-
-        /* Desktop Layout */
-        @media (min-width: 1024px) {
-            .main-content {
-                margin-left: 280px;
-            }
-        }
-
-        /* Hamburger Menu Animation */
-        .hamburger span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #fff;
-            transition: all 0.3s ease;
-            transform-origin: center;
-        }
-
-        .hamburger span:not(:last-child) {
-            margin-bottom: 5px;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
-<body class="text-stone-100 antialiased min-h-screen selection:bg-orange-500 selection:text-white grid-pattern">
+<body class="selection:bg-brand selection:text-white">
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay lg:hidden" id="menuOverlay"></div>
+    <main class="max-w-4xl mx-auto px-8 pt-32 pb-32">
+        
+        <!-- Intro Section: 文字だけで表現 -->
+        <section class="mb-48 fade-in">
+            <div class="text-[10px] uppercase tracking-[0.5em] text-stone-600 mb-8">Shunature</div>
+            <h1 class="text-4xl md:text-6xl font-light tracking-tighter leading-tight mb-16">
+                Shun Tonegawa <br>
+                <span class="text-brand">Always,ChillOut.</span>
+            </h1>
+            <div class="flex flex-col gap-4">
+                <p class="text-xs text-stone-500 leading-relaxed max-w-sm uppercase tracking-widest">
+                    偶然から感動へ<br>
+                    誰もが使いやすく、見やすいものを。
+                </p>
+                <div class="mt-4">
+                    <a href="https://blog.ffnet.work/post/links" class="text-[10px] uppercase tracking-[0.3em] text-brand border-b border-brand/20 hover:border-brand transition-colors pb-1">Links</a>
+                    <a href="https://blog.ffnet.work/post/about-me" class="text-[10px] uppercase tracking-[0.3em] text-brand border-b border-brand/20 hover:border-brand transition-colors pb-1 ml-8">About Me</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="p-6 space-y-8">
-            <!-- Profile Section -->
-            <div class="space-y-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
-                        S
-                    </div>
-                    <div class="min-w-0">
-                        <h1 class="text-lg font-bold text-white truncate">Shun Tonegawa</h1>
-                        <p class="text-xs text-stone-500 font-mono">shunature</p>
+        <!-- Now Playing: アルバムアートを排除しテキストとインジケーターのみに -->
+        <section id="music" class="mb-40 fade-in" style="animation-delay: 0.2s;">
+            <div class="border-t border-white/5 pt-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <span id="np-indicator" class="w-1 h-1 bg-stone-800"></span>
+                    <span class="text-[9px] uppercase tracking-[0.4em] text-stone-600">Now Listening</span>
+                    <div id="np-visualizer" class="hidden flex items-center h-3 opacity-0 transition-opacity ml-2">
+                        <span class="music-bar"></span>
+                        <span class="music-bar" style="animation-delay: 0.1s"></span>
+                        <span class="music-bar" style="animation-delay: 0.2s"></span>
                     </div>
                 </div>
                 
-                <div class="relative group mx-auto w-32 h-32">
-                    <div class="w-full h-full rounded-2xl overflow-hidden border-2 border-orange-500/20 relative rotating-border">
-                        <img src="https://image.nostr.build/bfdd902d28111cd56afc671b50bc49ac6ebc02e09760e7d4b1f3a8bc32784937.png" 
-                             alt="Shun Tonegawa" 
-                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                    <div class="min-w-0">
+                        <h4 id="np-title" class="text-2xl font-light tracking-tight truncate">...</h4>
+                        <p id="np-artist" class="text-sm text-stone-500 font-medium tracking-wider truncate mt-2 uppercase">Standby</p>
                     </div>
-                    <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-2xl shadow-2xl border-2 border-primary-dark">
-                        🌴
-                    </div>
-                </div>
-
-                <p class="text-sm text-stone-400 leading-relaxed text-center">
-                    よくモノを作っています<br>
-                    リンク集は<a href="https://hogus.work/post/links" class="text-orange-500 hover:text-orange-400 link-underline font-medium">こちら</a>
-                </p>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="space-y-2">
-                <h3 class="text-xs font-mono text-stone-600 uppercase tracking-widest mb-3">Navigation</h3>
-                <a href="#music" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-stone-400 hover:text-orange-500 hover:bg-stone-900/50 transition-all group">
-                    <i data-lucide="music" class="w-5 h-5"></i>
-                    <span class="font-medium">Music</span>
-                </a>
-                <a href="#journal" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-stone-400 hover:text-orange-500 hover:bg-stone-900/50 transition-all group">
-                    <i data-lucide="file-text" class="w-5 h-5"></i>
-                    <span class="font-medium">Journal</span>
-                </a>
-            </nav>
-
-            <!-- Connect Links -->
-            <div class="space-y-2">
-                <h3 class="text-xs font-mono text-stone-600 uppercase tracking-widest mb-3">Connect</h3>
-                <a href="https://mi.ffnet.work/@shunature" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-yellow-500 hover:bg-stone-900/30 transition-all">
-                    <i data-lucide="earth" class="w-4 h-4"></i>
-                    <span>Sunset Obs.</span>
-                </a>
-                <a href="https://nostx.io/ffnet.work" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-purple-500 hover:bg-stone-900/30 transition-all">
-                    <i data-lucide="radio" class="w-4 h-4"></i>
-                    <span>Nostr</span>
-                </a>
-                <a href="https://www.last.fm/user/shunature" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-red-500 hover:bg-stone-900/30 transition-all">
-                    <i data-lucide="headphones" class="w-4 h-4"></i>
-                    <span>Last.fm</span>
-                </a>
-                <a href="https://signal.me/#eu/m81TbpYpae9qUsL3SK2HkY9NnEzHpuBODVw3PZwdg4uHN1hupMpB4biJUwcuAI-f" target="_blank" class="flex items-center gap-3 px-4 py-2 rounded-xl text-sm text-stone-500 hover:text-blue-500 hover:bg-stone-900/30 transition-all">
-                    <i data-lucide="message-circle" class="w-4 h-4"></i>
-                    <span>Signal</span>
-                </a>
-            </div>
-
-            <!-- Footer Info -->
-            <div class="pt-4 border-t border-stone-900">
-                <p class="text-xs text-stone-600 text-center font-mono">
-                    &copy; 2026<br>
-                    Always Chillout
-                </p>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Mobile Header -->
-    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-primary-darker/95 backdrop-blur-xl border-b border-stone-900">
-        <div class="flex items-center justify-between px-4 py-3">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-lg font-bold">
-                    S
-                </div>
-                <div>
-                    <h1 class="text-base font-bold text-white">Shun Tonegawa</h1>
-                    <p class="text-xs text-stone-500 font-mono">shunature</p>
-                </div>
-            </div>
-            <button id="menuToggle" class="hamburger p-2 hover:bg-stone-900/50 rounded-lg transition-colors">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <div class="main-content">
-        
-        <!-- Main Content -->
-        <main class="pt-20 lg:pt-0">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 lg:py-12">
-                <!-- Now Playing Section -->
-                <section id="music" class="mb-16">
-                    <div class="bg-stone-950/50 border border-stone-900 rounded-3xl p-8 md:p-10 card-hover">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
-                                    <i data-lucide="music" class="w-6 h-6 text-orange-500"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-white">Now Playing</h3>
-                                    <p class="text-xs text-stone-500 font-mono">Last.fm Integration</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div id="np-visualizer" class="hidden items-center h-4 opacity-0 transition-opacity">
-                                    <span class="music-bar"></span>
-                                    <span class="music-bar"></span>
-                                    <span class="music-bar"></span>
-                                    <span class="music-bar"></span>
-                                </div>
-                                <div class="relative flex items-center gap-2">
-                                    <span id="np-indicator" class="w-2 h-2 rounded-full bg-stone-700 transition-all"></span>
-                                    <span id="np-status" class="text-xs font-mono text-stone-600 uppercase">Idle</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-6">
-                            <div class="relative w-24 h-24 rounded-2xl bg-stone-900 border border-stone-800 overflow-hidden flex-shrink-0">
-                                <i id="np-icon" data-lucide="disc" class="absolute inset-0 m-auto w-10 h-10 text-stone-700"></i>
-                                <img id="np-art" src="" class="w-full h-full object-cover hidden" alt="Album Art">
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h4 id="np-title" class="text-2xl font-bold text-white mb-1 truncate">Searching for signal...</h4>
-                                <p id="np-artist" class="text-stone-400 truncate mb-3">Idle State</p>
-                                <div id="np-progress-container" class="w-full h-1.5 bg-stone-900 rounded-full overflow-hidden opacity-0 transition-opacity">
-                                    <div id="np-progress-bar" class="h-full bg-gradient-to-r from-orange-500 to-orange-600 w-0 transition-all duration-1000 shadow-[0_0_10px_rgba(255,107,53,0.5)]"></div>
-                                </div>
-                            </div>
+                    <div class="w-full md:w-32">
+                        <div id="np-progress-container" class="w-full h-[1px] bg-white/5 opacity-0 transition-opacity">
+                            <div id="np-progress-bar" class="h-full bg-brand w-0 transition-all duration-1000"></div>
                         </div>
                     </div>
-                </section>
-
-                <!-- Journal Section -->
-                <section id="journal" class="mb-16">
-                    <div class="bg-stone-950/50 border border-stone-900 rounded-3xl p-8 md:p-10">
-                        <div class="flex items-center justify-between mb-8">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
-                                    <i data-lucide="file-text" class="w-6 h-6 text-orange-500"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-2xl font-bold text-white">Journal</h3>
-                                    <p class="text-xs text-stone-500 font-mono">Latest Posts</p>
-                                </div>
-                            </div>
-                            <a href="https://hogus.work" target="_blank" class="text-sm text-stone-400 hover:text-orange-500 transition-colors flex items-center gap-2 font-mono">
-                                View All
-                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                            </a>
-                        </div>
-                        
-                        <ul id="blog-list" class="space-y-1">
-                            <!-- Loading State -->
-                            <div class="animate-pulse space-y-4 py-4">
-                                <div class="flex justify-between items-center p-4">
-                                    <div class="h-5 bg-stone-900 rounded w-3/4"></div>
-                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
-                                </div>
-                                <div class="flex justify-between items-center p-4">
-                                    <div class="h-5 bg-stone-900 rounded w-2/3"></div>
-                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
-                                </div>
-                                <div class="flex justify-between items-center p-4">
-                                    <div class="h-5 bg-stone-900 rounded w-3/5"></div>
-                                    <div class="h-4 bg-stone-900 rounded w-20"></div>
-                                </div>
-                            </div>
-                        </ul>
-                    </div>
-                </section>
-
+                </div>
             </div>
-        </main>
+        </section>
 
-        <!-- Footer -->
-        <footer class="border-t border-stone-900 bg-primary-darker/50 backdrop-blur-xl mt-20">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 text-center">
-                <p class="text-sm text-stone-500 font-mono mb-2">Designed by <a href="https://gemini.google.com" target="_blank" class="text-orange-500 hover:text-orange-400">Gemini</a> · Reimagined by Claude</p>
+        <!-- Journal Section -->
+        <section id="journal" class="mb-40 fade-in" style="animation-delay: 0.4s;">
+            <div class="flex justify-between items-baseline mb-16">
+                <h2 class="text-xs uppercase tracking-[0.4em] font-bold text-stone-600">Recent Archives</h2>
+                <a href="https://blog.ffnet.work" class="text-[9px] uppercase tracking-[0.3em] text-brand hover:text-white transition-colors">More Journal —</a>
             </div>
-        </footer>
+            <ul id="blog-list" class="space-y-0">
+                <!-- Skeleton Loader -->
+                <li class="py-8 border-b border-white/5 flex justify-between">
+                    <div class="h-4 bg-white/5 w-1/2"></div>
+                </li>
+            </ul>
+        </section>
 
-        </main>
-    </div>
+        <!-- Connectivity: シンプルなテキストナビゲーション -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-16 border-t border-white/5 pt-16 fade-in" style="animation-delay: 0.6s;">
+            <a href="https://mi.ffnet.work" class="group block">
+                <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Instance</span>
+                <span class="text-sm font-light group-hover:text-brand transition-colors">Sunset Obs.</span>
+            </a>
+            <a href="https://blog.ffnet.work" class="group block">
+                <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Journal</span>
+                <span class="text-sm font-light group-hover:text-brand transition-colors">Writing Assets</span>
+            </a>
+            <a href="https://hogus.work" class="group block">
+                <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Development</span>
+                <span class="text-sm font-light group-hover:text-brand transition-colors">hogus.work</span>
+            </a>
+        </section>
+
+    </main>
 
     <script>
         lucide.createIcons();
 
-        // Hamburger Menu Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const menuOverlay = document.getElementById('menuOverlay');
-        const navLinks = document.querySelectorAll('.nav-link');
+        /* --- API Logic --- */
+        const LASTFM_API_KEY = 'c854fb5e1feccdae09ecd2bd97801f75'; 
+        const LASTFM_USER = 'shunature';
+        let currentTrackId = "";
+        let progressWidth = 0;
+        let progressInterval;
 
-        function toggleMenu() {
-            menuToggle.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            menuOverlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        async function updateNowPlaying() {
+            const titleEl = document.getElementById('np-title');
+            const artistEl = document.getElementById('np-artist');
+            const indicatorEl = document.getElementById('np-indicator');
+            const visualizerEl = document.getElementById('np-visualizer');
+            const progressContainer = document.getElementById('np-progress-container');
+            const progressBox = document.getElementById('np-progress-bar');
+
+            try {
+                const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
+                const data = await res.json();
+                if (!data.recenttracks?.track?.[0]) return;
+
+                const track = data.recenttracks.track[0];
+                const isPlaying = track['@attr']?.nowplaying === 'true';
+                const trackId = track.name + track.artist['#text'];
+
+                if (trackId !== currentTrackId) {
+                    currentTrackId = trackId;
+                    progressWidth = 0; 
+                    progressBox.style.width = '0%';
+                }
+
+                titleEl.innerText = track.name;
+                artistEl.innerText = track.artist['#text'];
+
+                if (isPlaying) {
+                    indicatorEl.className = 'w-1 h-1 bg-brand shadow-[0_0_8px_#ff6b35]';
+                    visualizerEl.classList.remove('hidden', 'opacity-0');
+                    progressContainer.classList.remove('opacity-0');
+                    if (!progressInterval) {
+                        progressInterval = setInterval(() => {
+                            if (progressWidth < 100) {
+                                progressWidth += 0.25;
+                                progressBox.style.width = progressWidth + '%';
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    indicatorEl.className = 'w-1 h-1 bg-stone-800';
+                    visualizerEl.classList.add('opacity-0');
+                    progressContainer.classList.add('opacity-0');
+                    if (progressInterval) {
+                        clearInterval(progressInterval);
+                        progressInterval = null;
+                    }
+                }
+            } catch (e) { console.error('Last.fm Sync Error'); }
         }
 
-        menuToggle.addEventListener('click', toggleMenu);
-        menuOverlay.addEventListener('click', toggleMenu);
-
-        // Close menu when clicking nav links on mobile
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 1024) {
-                    toggleMenu();
-                }
-            });
-        });
-
-        // Close menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
-
-        /* --- Blog RSS Fetch --- */
-        const BLOG_RSS_URL = 'https://hogus.work/index.xml';
-        const RSS_API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_RSS_URL)}`;
-
         async function fetchBlog() {
+            const BLOG_RSS_URL = 'https://blog.ffnet.work/index.xml';
+            const RSS_API = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(BLOG_RSS_URL)}`;
             const list = document.getElementById('blog-list');
+
             try {
                 const res = await fetch(RSS_API);
                 const data = await res.json();
-                
-                if (data.status === 'ok' && data.items) {
+                if (data.status === 'ok') {
                     list.innerHTML = '';
-                    data.items.slice(0, 8).forEach(item => {
-                        const date = new Date(item.pubDate);
-                        const formattedDate = date.toLocaleDateString('ja-JP', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit'
-                        });
-
+                    data.items.slice(0, 4).forEach(item => {
+                        const date = new Date(item.pubDate).toLocaleDateString('ja-JP', {
+                            year: 'numeric', month: '2-digit', day: '2-digit'
+                        }).replace(/\//g, '.');
+                        
                         const li = document.createElement('li');
+                        li.className = "group border-b border-white/5";
                         li.innerHTML = `
-                            <a href="${item.link}" target="_blank" 
-                               class="group flex items-center justify-between p-4 rounded-xl hover:bg-stone-900/50 transition-all">
-                                <div class="flex items-center gap-4 flex-1 min-w-0">
-                                    <div class="w-2 h-2 rounded-full bg-stone-700 group-hover:bg-orange-500 transition-colors flex-shrink-0"></div>
-                                    <h4 class="text-base font-medium text-stone-300 group-hover:text-orange-500 transition-colors truncate">
-                                        ${item.title}
-                                    </h4>
-                                </div>
-                                <time class="text-xs font-mono text-stone-600 group-hover:text-orange-400 transition-colors flex-shrink-0 ml-4">
-                                    ${formattedDate}
-                                </time>
+                            <a href="${item.link}" target="_blank" class="flex flex-col md:flex-row md:items-center justify-between py-10">
+                                <span class="text-xl font-light group-hover:text-brand transition-colors truncate pr-4">${item.title}</span>
+                                <span class="text-[9px] font-mono text-stone-800 tracking-[0.2em] mt-2 md:mt-0 uppercase">${date}</span>
                             </a>
                         `;
                         list.appendChild(li);
                     });
                 }
-            } catch (e) {
-                list.innerHTML = `
-                    <div class="py-12 text-center">
-                        <p class="text-stone-600 text-sm font-mono">Failed to load journal entries</p>
-                    </div>
-                `;
-            }
+            } catch (e) { list.innerHTML = '<li class="py-12 text-stone-900 text-[9px] tracking-widest text-center uppercase">Feed Offline</li>'; }
         }
 
-        fetchBlog();
         updateNowPlaying();
-        setInterval(updateNowPlaying, 30000);
+        fetchBlog();
+        setInterval(updateNowPlaying, 20000);
     </script>
 </body>
 </html>

@@ -110,11 +110,7 @@
                         <h4 id="np-title" class="text-2xl font-light tracking-tight truncate">...</h4>
                         <p id="np-artist" class="text-sm text-stone-500 font-medium tracking-wider truncate mt-2 uppercase">Standby</p>
                     </div>
-                    <div class="w-full md:w-32">
-                        <div id="np-progress-container" class="w-full h-[1px] bg-white/5 opacity-0 transition-opacity">
-                            <div id="np-progress-bar" class="h-full bg-brand w-0 transition-all duration-1000"></div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </section>
@@ -134,7 +130,7 @@
         </section>
 
         <!-- Connectivity: シンプルなテキストナビゲーション -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-16 border-t border-white/5 pt-16 fade-in" style="animation-delay: 0.6s;">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-16 border-t border-white/5 pt-16 fade-in" style="animation-delay: 0.6s;">
             <a href="https://mi.ffnet.work" class="group block">
                 <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Instance</span>
                 <span class="text-sm font-light group-hover:text-brand transition-colors">Sunset Obs.</span>
@@ -143,31 +139,23 @@
                 <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Journal</span>
                 <span class="text-sm font-light group-hover:text-brand transition-colors">Writing Assets</span>
             </a>
-            <a href="https://hogus.work" class="group block">
-                <span class="text-[9px] uppercase tracking-[0.4em] text-stone-700 block mb-2">Development</span>
-                <span class="text-sm font-light group-hover:text-brand transition-colors">hogus.work</span>
-            </a>
+            
         </section>
 
     </main>
 
+    <script src="lastfm.js"></script>
     <script>
         lucide.createIcons();
 
         /* --- API Logic --- */
-        const LASTFM_API_KEY = 'c854fb5e1feccdae09ecd2bd97801f75'; 
-        const LASTFM_USER = 'shunature';
         let currentTrackId = "";
-        let progressWidth = 0;
-        let progressInterval;
 
         async function updateNowPlaying() {
             const titleEl = document.getElementById('np-title');
             const artistEl = document.getElementById('np-artist');
             const indicatorEl = document.getElementById('np-indicator');
             const visualizerEl = document.getElementById('np-visualizer');
-            const progressContainer = document.getElementById('np-progress-container');
-            const progressBox = document.getElementById('np-progress-bar');
 
             try {
                 const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
@@ -180,8 +168,6 @@
 
                 if (trackId !== currentTrackId) {
                     currentTrackId = trackId;
-                    progressWidth = 0; 
-                    progressBox.style.width = '0%';
                 }
 
                 titleEl.innerText = track.name;
@@ -190,23 +176,9 @@
                 if (isPlaying) {
                     indicatorEl.className = 'w-1 h-1 bg-brand shadow-[0_0_8px_#ff6b35]';
                     visualizerEl.classList.remove('hidden', 'opacity-0');
-                    progressContainer.classList.remove('opacity-0');
-                    if (!progressInterval) {
-                        progressInterval = setInterval(() => {
-                            if (progressWidth < 100) {
-                                progressWidth += 0.25;
-                                progressBox.style.width = progressWidth + '%';
-                            }
-                        }, 1000);
-                    }
                 } else {
                     indicatorEl.className = 'w-1 h-1 bg-stone-800';
                     visualizerEl.classList.add('opacity-0');
-                    progressContainer.classList.add('opacity-0');
-                    if (progressInterval) {
-                        clearInterval(progressInterval);
-                        progressInterval = null;
-                    }
                 }
             } catch (e) { console.error('Last.fm Sync Error'); }
         }

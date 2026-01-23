@@ -194,8 +194,9 @@
                 if (data.status === 'ok') {
                     list.innerHTML = '';
                     data.items.slice(0, 4).forEach(item => {
-                        const date = new Date(item.pubDate).toLocaleDateString('ja-JP', {
-                            year: 'numeric', month: '2-digit', day: '2-digit'
+                        const date = new Date(item.pubDate + 'Z').toLocaleDateString('ja-JP', {
+                            year: 'numeric', month: '2-digit', day: '2-digit',
+                            timeZone: 'Asia/Tokyo'
                         }).replace(/\//g, '.');
                         
                         const li = document.createElement('li');
